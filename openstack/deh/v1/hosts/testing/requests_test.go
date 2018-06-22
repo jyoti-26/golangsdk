@@ -189,10 +189,9 @@ func TestListServer(t *testing.T) {
 			`)
 	})
 
-	allPages, err := hosts.ListServer(fake.ServiceClient(), "671611d2-b45c-4648-9e78-06eb24522291", hosts.ListServerOpts{}).AllPages()
+	actual, err := hosts.ListServer(fake.ServiceClient(), "671611d2-b45c-4648-9e78-06eb24522291", hosts.ListServerOpts{})
 	th.AssertNoErr(t, err)
-	actual, err := hosts.ExtractServers(allPages)
-	th.AssertNoErr(t, err)
+
 	expected := []hosts.Server{
 		{
 			Status: "ACTIVE",
