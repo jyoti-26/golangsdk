@@ -6,7 +6,6 @@ import (
 	"time"
 )
 
-
 type Host struct {
 	// ID is the unique identifier for the dedicated host .
 	ID string `json:"dedicated_host_id"`
@@ -88,8 +87,6 @@ func (r HostPage) NextPageURL() (string, error) {
 	return golangsdk.ExtractNextURL(s.Links)
 }
 
-
-
 type commonResult struct {
 	golangsdk.Result
 }
@@ -121,6 +118,7 @@ type UpdateResult struct {
 type DeleteResult struct {
 	commonResult
 }
+
 // GetResult represents the result of a get operation. Call its Extract
 // method to interpret it as a host.
 type GetResult struct {
@@ -190,7 +188,6 @@ func (r ServerPage) NextPageURL() (string, error) {
 	}
 	return golangsdk.ExtractNextURL(s.Links)
 }
-
 
 // ExtractServers accepts a Page struct, specifically a ServerPage struct,
 // and extracts the elements into a slice of Server structs. In other words,

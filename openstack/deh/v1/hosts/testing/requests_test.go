@@ -15,44 +15,17 @@ func TestGet(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 
-	th.Mux.HandleFunc("/17fbda95add24720a4038ba4b1c705ed/dedicated-hosts/66156a61-27c2-4169-936b-910dd9c73da3", func(w http.ResponseWriter, r *http.Request) {
+	th.Mux.HandleFunc(dehEndpoint+"/"+HostID, func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "GET")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, `
-{
-    "dedicated_host": {
-        "allocated_at": "2018-06-13T07:44:55Z",
-        "availability_zone": "eu-de-02",
-        "csg_host": "pod01.eu-de-02",
-        "name": "test-aj2",
-        "available_memory": 270336,
-        "released_at": "",
-        "auto_placement": "off",
-        "available_vcpus": 36,
-        "dedicated_host_id": "66156a61-27c2-4169-936b-910dd9c73da3",
-        "state": "available",
-        "instance_total": 0,
-        "host_properties": {           
-            "host_type": "h1",
-            "vcpus": 36,
-            "memory": 270336,
-            "cores": 12,
-            "sockets": 2,
-            "host_type_name": "High performance"
-        },
-        "csd_host": "fc-nova-compute010#8120665",
-        "instance_uuids": [],
-        "project_id": "17fbda95add24720a4038ba4b1c705ed"
-    }
-}
-		`)
+		fmt.Fprintf(w, getResponse)
 	})
 
-	s, err := hosts.Get(fake.ServiceClient(), "66156a61-27c2-4169-936b-910dd9c73da3").Extract()
+	s, err := hosts.Get(client.ServiceClient(), HostID).Extract()
 	th.AssertNoErr(t, err)
 	th.AssertEquals(t, "66156a61-27c2-4169-936b-910dd9c73da3", s.ID)
 	th.AssertEquals(t, "test-aj2", s.Name)
@@ -72,45 +45,19 @@ func TestList(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 
-	th.Mux.HandleFunc("/17fbda95add24720a4038ba4b1c705ed/dedicated-hosts", func(w http.ResponseWriter, r *http.Request) {
+	th.Mux.HandleFunc(dehEndpoint, func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "GET")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, `
-{
-    "dedicated_hosts": [ {
-            "availability_zone": "eu-de-01",
-            "name": "c2c-deh-test",
-            "available_memory": 262144,
-            "auto_placement": "off",
-            "available_vcpus": 70,
-            "dedicated_host_id": "671611d2-b45c-4648-9e78-06eb24522291",
-            "state": "available",
-            "instance_total": 2,
-            "host_properties": {                
-                "host_type": "general",
-                "vcpus": 72,
-                "memory": 270336,
-                "cores": 12,
-                "sockets": 2,
-                "host_type_name": "General computing"
-            },
-            "instance_uuids": [
-                "3de1ce75-2550-4a46-a689-dd33ca2b62d6",
-                "885dc71d-905d-48b5-bae7-db66801dc175"
-            ],
-            "project_id": "17fbda95add24720a4038ba4b1c705ed"
-        }]
-}
-			`)
+		fmt.Fprintf(w, listResponse)
 	})
 
 	//count := 0
 
-	actual, err := hosts.List(fake.ServiceClient(), hosts.ListOpts{})
+	actual, err := hosts.List(client.ServiceClient(), hosts.ListOpts{})
 	if err != nil {
 		t.Errorf("Failed to extract hosts: %v", err)
 	}
@@ -146,50 +93,17 @@ func TestListServer(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 
-	th.Mux.HandleFunc("/17fbda95add24720a4038ba4b1c705ed/dedicated-hosts/671611d2-b45c-4648-9e78-06eb24522291/servers", func(w http.ResponseWriter, r *http.Request) {
+	th.Mux.HandleFunc(dehEndpoint+"/"+HostID+"/servers", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "GET")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, `
-{
-     "servers": [ {
-            "status": "ACTIVE", 
-            "flavor": {
-                "id": "normal1"
-            },
- 			"addresses": {
-                "0b98c646-617f-4d90-9ca5-385f0cd73ea7": [
-                    {
-                        "version": 4,
-                        "addr": "192.168.3.133"
-                    }
-                ]
-            },
-            "id": "3de1ce75-2550-4a46-a689-dd33ca2b62d6",
-            "user_id": "6d78fa8550ae45d6932a1fadfb1fa552",
-            "name": "c2c-ecs-test-2",
-            "tenant_id": "17fbda95add24720a4038ba4b1c705ed",
-            "metadata": {
-                "metering.image_id": "c0ea3ff1-432e-4650-8a1b-372a80b2d2be",
-                "metering.imagetype": "gold",
-                "metering.resourcespeccode": "deh.linux",
-                "metering.cloudServiceType": "sys.service.type.ec2",
-                "image_name": "Standard_CentOS_7_latest",
-                "metering.resourcetype": "1",
-                "os_bit": "64",
-                "vpc_id": "0b98c646-617f-4d90-9ca5-385f0cd73ea7",
-                "os_type": "Linux",
-                "charging_mode": "0"
-            }
-        }]
-}
-			`)
+		fmt.Fprintf(w, listserverResponse)
 	})
 
-	actual, err := hosts.ListServer(fake.ServiceClient(), "671611d2-b45c-4648-9e78-06eb24522291", hosts.ListServerOpts{})
+	actual, err := hosts.ListServer(client.ServiceClient(), HostID, hosts.ListServerOpts{})
 	th.AssertNoErr(t, err)
 
 	expected := []hosts.Server{
@@ -227,11 +141,10 @@ func TestListServer(t *testing.T) {
 	th.AssertDeepEquals(t, expected, actual)
 }
 
-
 func TestAllocateDeH(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
-	th.Mux.HandleFunc("/dedicated-hosts", func(w http.ResponseWriter, r *http.Request) {
+	th.Mux.HandleFunc(dehEndpoint, func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "POST")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 		th.TestHeader(t, r, "Content-Type", "application/json")
@@ -260,7 +173,7 @@ func TestAllocateDeH(t *testing.T) {
 func TestUpdateDeH(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
-	th.Mux.HandleFunc("/dedicated-hosts/"+HostID, func(w http.ResponseWriter, r *http.Request) {
+	th.Mux.HandleFunc(dehEndpoint+"/"+HostID, func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "PUT")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 		th.TestJSONRequest(t, r, updateRequest)
@@ -279,7 +192,7 @@ func TestDeleteDeH(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 
-	th.Mux.HandleFunc("/dedicated-hosts/"+HostID, func(w http.ResponseWriter, r *http.Request) {
+	th.Mux.HandleFunc(dehEndpoint+"/"+HostID, func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "DELETE")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 		w.WriteHeader(http.StatusAccepted)

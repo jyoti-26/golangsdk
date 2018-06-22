@@ -1,4 +1,5 @@
 package common
+
 import (
 	"github.com/huaweicloud/golangsdk"
 	"github.com/huaweicloud/golangsdk/testhelper/client"
@@ -15,4 +16,3 @@ func ServiceClient() *golangsdk.ServiceClient {
 	sc.ProjectID = ProjectID
 	return sc
 }
-
