@@ -47,7 +47,7 @@ type UpdateOptsBuilder interface {
 
 // UpdateOpts contains all the values needed to update a DeH.
 type UpdateOpts struct {
-	Name          string `json:"name"`
+	Name          string `json:"name,omitempty"`
 	AutoPlacement string `json:"auto_placement,omitempty"`
 }
 
