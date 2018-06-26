@@ -2,12 +2,12 @@ package testing
 
 import (
 	"fmt"
+	"github.com/huaweicloud/golangsdk"
+	"github.com/huaweicloud/golangsdk/openstack/bms/v2/flavors"
 	th "github.com/huaweicloud/golangsdk/testhelper"
 	fake "github.com/huaweicloud/golangsdk/testhelper/client"
-	"github.com/huaweicloud/golangsdk/openstack/bms/v2/flavors"
 	"net/http"
 	"testing"
-	"github.com/huaweicloud/golangsdk"
 )
 
 func TestListFlavor(t *testing.T) {

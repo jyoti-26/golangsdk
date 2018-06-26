@@ -36,7 +36,7 @@ func Create(c *golangsdk.ServiceClient, serverId string, opts CreateOptsBuilder)
 }
 
 // Delete will permanently delete a particular tag based on its unique ID.
-func  Delete(c *golangsdk.ServiceClient, serverId string) (r DeleteResult) {
+func Delete(c *golangsdk.ServiceClient, serverId string) (r DeleteResult) {
 	_, r.Err = c.Delete(resourceURL(c, serverId), nil)
 	return
 }

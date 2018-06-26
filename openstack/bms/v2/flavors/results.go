@@ -1,10 +1,10 @@
 package flavors
 
 import (
+	"encoding/json"
 	"github.com/huaweicloud/golangsdk"
 	"github.com/huaweicloud/golangsdk/pagination"
 	"strconv"
-	"encoding/json"
 )
 
 // Flavor represent (virtual) hardware configurations for server resources

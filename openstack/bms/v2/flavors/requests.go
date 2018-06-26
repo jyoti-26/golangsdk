@@ -80,7 +80,7 @@ type ListOpts struct {
 	// MinDisk and MinRAM, if provided, elides flavors which do not meet your
 	// criteria.
 	MinDisk int `q:"minDisk"`
-	MinRAM int `q:"minRam"`
+	MinRAM  int `q:"minRam"`
 
 	// AccessType, if provided, instructs List which set of flavors to return.
 	// If IsPublic not provided, flavors for the current project are returned.
@@ -92,7 +92,6 @@ type ListOpts struct {
 	//SortDir sets the direction, and is either `asc' or `desc'
 	SortDir SortDir `q:"sort_dir"`
 }
-
 
 func List(c *golangsdk.ServiceClient, opts ListOpts) ([]Flavor, error) {
 	q, err := golangsdk.BuildQueryString(&opts)

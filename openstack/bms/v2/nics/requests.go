@@ -25,7 +25,7 @@ type ListOpts struct {
 // Default policy settings return only those nics that are owned by the
 // tenant who submits the request, unless an admin user submits the request.
 func List(c *golangsdk.ServiceClient, serverId string, opts ListOpts) ([]Nic, error) {
-	u := listURL(c,serverId)
+	u := listURL(c, serverId)
 	pages, err := pagination.NewPager(c, u, func(r pagination.PageResult) pagination.Page {
 		return NicPage{pagination.LinkedPageBase{PageResult: r}}
 	}).AllPages()
@@ -79,7 +79,7 @@ func getStructField(v *Nic, field string) string {
 }
 
 // Get retrieves a particular nic based on its unique ID.
-func Get(c *golangsdk.ServiceClient,serverId string, id string) (r GetResult) {
+func Get(c *golangsdk.ServiceClient, serverId string, id string) (r GetResult) {
 	_, r.Err = c.Get(getURL(c, serverId, id), &r.Body, nil)
 	return
 }

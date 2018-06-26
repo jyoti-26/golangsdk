@@ -1,8 +1,8 @@
 package common
 
 import (
-	"github.com/huaweicloud/golangsdk/testhelper/client"
 	"github.com/huaweicloud/golangsdk"
+	"github.com/huaweicloud/golangsdk/testhelper/client"
 	"strings"
 )
 

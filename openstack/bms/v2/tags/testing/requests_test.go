@@ -2,11 +2,11 @@ package testing
 
 import (
 	"fmt"
-	"net/http"
-	"testing"
 	fake "github.com/huaweicloud/golangsdk/openstack/bms/v2/common"
 	"github.com/huaweicloud/golangsdk/openstack/bms/v2/tags"
 	th "github.com/huaweicloud/golangsdk/testhelper"
+	"net/http"
+	"testing"
 )
 
 func TestCreateTag(t *testing.T) {
@@ -40,7 +40,7 @@ func TestCreateTag(t *testing.T) {
 	options := tags.CreateOpts{
 		Tag: []string{"__type_baremetal"},
 	}
-	n, err := tags.Create(fake.ServiceClient(),"2bff7a8a-3934-4f79-b1d6-53dc5540f00e", options).Extract()
+	n, err := tags.Create(fake.ServiceClient(), "2bff7a8a-3934-4f79-b1d6-53dc5540f00e", options).Extract()
 	th.AssertNoErr(t, err)
 	th.AssertEquals(t, "__type_baremetal", n.Tags[0])
 }
