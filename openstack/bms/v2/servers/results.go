@@ -1,9 +1,8 @@
 package servers
 
 import (
-	"github.com/huaweicloud/golangsdk/pagination"
 	"github.com/huaweicloud/golangsdk"
-	"encoding/json"
+	"github.com/huaweicloud/golangsdk/pagination"
 	"time"
 )
 
@@ -48,6 +47,7 @@ func (r commonResult) Extract() (*Server, error) {
 	err := r.ExtractInto(&s)
 	return s.Server, err
 }
+
 // ExtractServers accepts a Page struct, specifically a ServerPage struct,
 // and extracts the elements into a slice of Server structs. In other words,
 // a generic collection is mapped into a relevant slice.
@@ -75,9 +75,9 @@ type Server struct {
 	Updated time.Time `json:"updated"`
 	Created time.Time `json:"created"`
 	//Specifies the nova-compute status.
-	HostStatus  string    `json:"host_status"`
+	HostStatus string `json:"host_status"`
 	//Specifies the host ID of the BMS.
-	HostID  string    `json:"hostid"`
+	HostID string `json:"hostid"`
 	// Progress ranges from 0..100.
 	// A request made against the server completes only once Progress reaches 100.
 	Progress int `json:"progress"`
@@ -85,7 +85,7 @@ type Server struct {
 	AccessIPv4 string `json:"accessIPv4"`
 	AccessIPv6 string `json:"accessIPv6"`
 	// Image refers to a JSON object, which itself indicates the OS image used to deploy the server.
-	Image map[string]interface{} `json:"image"`
+	Image Images `json:"image"`
 	// Flavor refers to a JSON object, which itself indicates the hardware configuration of the deployed server.
 	Flavor Flavor `json:"flavor"`
 	// Addresses includes a list of all IP addresses assigned to the server, keyed by pool.
@@ -105,7 +105,7 @@ type Server struct {
 	//Added in micro version 2.26.
 	Tags []string `json:"tags"`
 	//Specifies whether a BMS is locked
-	Locked bool `json:"locked"`
+	Locked      bool   `json:"locked"`
 	ConfigDrive string `json:"config_drive"`
 	//Specifies the AZ ID. This is an extended attribute.
 	AvailabilityZone string `json:"OS-EXT-AZ:availability_zone"`
@@ -113,7 +113,7 @@ type Server struct {
 	DiskConfig string `json:"OS-DCF:diskConfig"`
 	//Specifies the name of a host on the hypervisor.
 	// It is an extended attribute provided by the Nova virt driver
-	HostName string `json:"OS-EXT-SRV-ATTR:hostname"`
+	HostName    string `json:"OS-EXT-SRV-ATTR:hostname"`
 	Description string `json:"description"`
 	//Specifies the job status of the BMS. This is an extended attribute.
 	TaskState string `json:"OS-EXT-STS:task_state"`
@@ -141,44 +141,47 @@ type Server struct {
 	VMState string `json:"OS-EXT-STS:vm_state"`
 	//Specifies the BMS ID. This is an extended attribute.
 	InstanceName string `json:"OS-EXT-SRV-ATTR:instance_name"`
-
 }
 
-type SecurityGroups struct{
+type SecurityGroups struct {
 	Name string `json:"name"`
 }
-type  Flavor struct{
-	ID string `json:"id"`
-	Links []Links  `json:"links"`
+type Flavor struct {
+	ID    string  `json:"id"`
+	Links []Links `json:"links"`
 }
 
 type Links struct {
-	Rel string `json:"rel"`
+	Rel  string `json:"rel"`
 	Href string `json:"href"`
 }
 
-func (r *Server) UnmarshalJSON(b []byte) error {
-	type tmp Server
-	var s struct {
-		tmp
-		Image interface{} `json:"image"`
-	}
-	err := json.Unmarshal(b, &s)
-	if err != nil {
-		return err
-	}
-
-	*r = Server(s.tmp)
-
-	switch t := s.Image.(type) {
-	case map[string]interface{}:
-		r.Image = t
-	case string:
-		switch t {
-		case "":
-			r.Image = nil
-		}
-	}
-
-	return err
+type Images struct {
+	ID    string  `json:"id"`
+	Links []Links `json:"links"`
 }
+
+// SortDir is a type for specifying in which direction to sort a list of servers.
+type SortDir string
+
+// SortKey is a type for specifying by which key to sort a list of servers.
+type SortKey string
+
+var (
+	// SortAsc is used to sort a list of servers in ascending order.
+	SortAsc SortDir = "asc"
+	// SortDesc is used to sort a list of servers in descending order.
+	SortDesc SortDir = "desc"
+	// SortId is used to sort a list of servers by uuid.
+	SortUUID SortKey = "uuid"
+	// SortName is used to sort a list of servers by vm_state.
+	SortVMState SortKey = "vm_state"
+	// SortRAM is used to sort a list of servers by display_name.
+	SortDisplayName SortKey = "display_name"
+	// SortVCPUs is used to sort a list of servers by task_state.
+	SortTaskState SortKey = "task_state"
+	// SortDisk is used to sort a list of servers by power_state.
+	SortPowerState SortKey = "power_state"
+	// SortDisk is used to sort a list of servers by availability_zone.
+	SortAvailabilityZone SortKey = "availability_zone"
+)
