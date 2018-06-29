@@ -1,15 +1,13 @@
-
 package testing
 
 import (
-"fmt"
-"github.com/huaweicloud/golangsdk/openstack/bms/v2/servers"
-th "github.com/huaweicloud/golangsdk/testhelper"
-fake "github.com/huaweicloud/golangsdk/testhelper/client"
-"net/http"
-"testing"
+	"fmt"
+	"github.com/huaweicloud/golangsdk/openstack/bms/v2/servers"
+	th "github.com/huaweicloud/golangsdk/testhelper"
+	fake "github.com/huaweicloud/golangsdk/testhelper/client"
+	"net/http"
+	"testing"
 )
-
 
 func TestListServers(t *testing.T) {
 	th.SetupHTTP()
@@ -66,32 +64,31 @@ func TestListServers(t *testing.T) {
 	})
 
 	serverOpts := servers.ListServerOpts{}
-	actual,err := servers.ListServer(fake.ServiceClient(),serverOpts)
+	actual, err := servers.ListServer(fake.ServiceClient(), serverOpts)
 	if err != nil {
 		t.Errorf("Failed to extract server list: %v", err)
 	}
 
 	expected := []servers.Server{
 		{
-			ID:         "1d3bf3ae-bc4a-4890-86f8-8c31a6eb764f",
-			Status:     "ACTIVE",
-			UserID: 	"aec83183a5b54cf2bc28812d1dc5509e",
-			Name:		"BMS-1",
-			TenantID:	"17fbda95add24720a4038ba4b1c705ed",
-			KeyName:"KeyPair-click2cloud",
-			Flavor: servers.Flavor{ID:"physical.o2.medium", Links: []servers.Links{{Rel:"bookmark",
-																						Href:"https://ecs.eu-de.otc.t-systems.com:443/17fbda95add24720a4038ba4b1c705ed/flavors/physical.o2.medium",},},},
+			ID:       "1d3bf3ae-bc4a-4890-86f8-8c31a6eb764f",
+			Status:   "ACTIVE",
+			UserID:   "aec83183a5b54cf2bc28812d1dc5509e",
+			Name:     "BMS-1",
+			TenantID: "17fbda95add24720a4038ba4b1c705ed",
+			KeyName:  "KeyPair-click2cloud",
+			Flavor: servers.Flavor{ID: "physical.o2.medium", Links: []servers.Links{{Rel: "bookmark",
+				Href: "https://ecs.eu-de.otc.t-systems.com:443/17fbda95add24720a4038ba4b1c705ed/flavors/physical.o2.medium"}}},
 		},
 		{
-			ID:         "1d3bf3ae-bc4a-4890-86f8-8c31a6eb764r",
-			Status:     "ACTIVE",
-			UserID: 	"aec83183a5b54cf2bc28812d1dc5509e",
-			Name:		"BMS-2",
-			TenantID:	"17fbda95add24720a4038ba4b1c705ed",
-			KeyName:"KeyPair-click2cloud",
-			Flavor: servers.Flavor{ID:"physical.o2.medium", Links: []servers.Links{{Rel:"bookmark",
-				Href:"https://ecs.eu-de.otc.t-systems.com:443/17fbda95add24720a4038ba4b1c705ed/flavors/physical.o2.medium",},},},
-
+			ID:       "1d3bf3ae-bc4a-4890-86f8-8c31a6eb764r",
+			Status:   "ACTIVE",
+			UserID:   "aec83183a5b54cf2bc28812d1dc5509e",
+			Name:     "BMS-2",
+			TenantID: "17fbda95add24720a4038ba4b1c705ed",
+			KeyName:  "KeyPair-click2cloud",
+			Flavor: servers.Flavor{ID: "physical.o2.medium", Links: []servers.Links{{Rel: "bookmark",
+				Href: "https://ecs.eu-de.otc.t-systems.com:443/17fbda95add24720a4038ba4b1c705ed/flavors/physical.o2.medium"}}},
 		},
 	}
 
@@ -131,6 +128,3 @@ func TestGetServer(t *testing.T) {
 	th.AssertEquals(t, "17fbda95add24720a4038ba4b1c705ed", n.TenantID)
 
 }
-
-
-

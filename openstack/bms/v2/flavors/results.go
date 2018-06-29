@@ -16,6 +16,11 @@ type Flavor struct {
 	// Disk is the amount of root disk, measured in GB.
 	Disk int `json:"disk"`
 
+	// MinDisk and MinRAM, if provided, elides flavors which do not meet your
+	// criteria.
+	MinDisk int `json:"minDisk"`
+	MinRAM  int `json:"minRam"`
+
 	// RAM is the amount of memory, measured in MB.
 	RAM int `json:"ram"`
 
@@ -42,6 +47,11 @@ type Flavor struct {
 
 	// Specifies the shortcut link of the BMS flavor.
 	Links []golangsdk.Link `json:"links"`
+
+	SortKey string `json:"sort_key"`
+
+	//SortDir sets the direction, and is either `asc' or `desc'
+	SortDir string `json:"sort_dir"`
 }
 
 func (r *Flavor) UnmarshalJSON(b []byte) error {

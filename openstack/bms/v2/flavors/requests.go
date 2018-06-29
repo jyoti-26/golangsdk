@@ -35,29 +35,6 @@ const (
 	AllAccess AccessType = "None"
 )
 
-// SortDir is a type for specifying in which direction to sort a list of flavor.
-type SortDir string
-
-// SortKey is a type for specifying by which key to sort a list of flavor.
-type SortKey string
-
-var (
-	// SortAsc is used to sort a list of flavors in ascending order.
-	SortAsc SortDir = "asc"
-	// SortDesc is used to sort a list of flavors in descending order.
-	SortDesc SortDir = "desc"
-	// SortId is used to sort a list of flavors by flavorid.
-	SortId SortKey = "id"
-	// SortName is used to sort a list of flavors by name.
-	SortName SortKey = "name"
-	// SortRAM is used to sort a list of flavors by memory_mb.
-	SortRAM SortKey = "memory_mb"
-	// SortVCPUs is used to sort a list of flavors by vcpus.
-	SortVCPUs SortKey = "vcpus"
-	// SortDisk is used to sort a list of flavors by root_gb.
-	SortDisk SortKey = "root_gb"
-)
-
 /*
 	ListOpts filters the results returned by the List() function.
 	For example, a flavor with a minDisk field of 10 will not be returned if you
@@ -87,10 +64,10 @@ type ListOpts struct {
 	AccessType AccessType `q:"is_public"`
 
 	//SortKey allows you to sort by a particular attribute
-	SortKey SortKey `q:"sort_key"`
+	SortKey string `q:"sort_key"`
 
 	//SortDir sets the direction, and is either `asc' or `desc'
-	SortDir SortDir `q:"sort_dir"`
+	SortDir string `q:"sort_dir"`
 }
 
 func List(c *golangsdk.ServiceClient, opts ListOpts) ([]Flavor, error) {
