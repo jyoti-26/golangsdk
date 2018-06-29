@@ -23,7 +23,8 @@ type ListServerOpts struct {
 	// KeyName indicates which public key was injected into the server on launch.
 	KeyName string `json:"key_name"`
 	// Specifies the BMS name.
-	Name    string `q:"name"`
+	Name string `q:"name"`
+	// Specifies the BMS image ID.
 	ImageID string `q:"image"`
 	// Specifies flavor ID.
 	FlavorID string `q:"flavor"`
@@ -44,7 +45,7 @@ type ListServerOpts struct {
 	//Specifies the tag list. Returns BMSs that do not match all tags.
 	NotTags string `q:"not-tags"`
 	//Specifies the tag list. Returns BMSs that do not match any of the tags.
-	NotTagsAny int `q:"not-tags-any"`
+	NotTagsAny string `q:"not-tags-any"`
 	//Specifies the BMS sorting attribute, which can be the BMS UUID (uuid), BMS status (vm_state),
 	// BMS name (display_name), BMS task status (task_state), power status (power_state),
 	// creation time (created_at), last time when the BMS is updated (updated_at), and availability zone
