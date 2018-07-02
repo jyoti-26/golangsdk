@@ -31,3 +31,9 @@ type CreateResult struct {
 type DeleteResult struct {
 	golangsdk.ErrResult
 }
+
+// GetResult represents the result of a get operation. Call its Extract
+// method to interpret it as a Tag.
+type GetResult struct {
+	commonResult
+}
