@@ -22,8 +22,8 @@ type ListServerOpts struct {
 	HostID string `json:"hostid"`
 	// KeyName indicates which public key was injected into the server on launch.
 	KeyName string `json:"key_name"`
-	// Specifies the BMS name.
-	Name string `q:"name"`
+	// Specifies the BMS name, not added in query since returns like results.
+	Name string `json:"name"`
 	// Specifies the BMS image ID.
 	ImageID string `q:"image"`
 	// Specifies flavor ID.
@@ -60,7 +60,6 @@ func FilterParam(opts ListServerOpts) (filter ListServerOpts) {
 	if opts.ID != "" {
 		filter.ID = opts.ID
 	}
-	filter.Name = opts.Name
 	filter.Status = opts.Status
 	filter.FlavorID = opts.FlavorID
 	filter.ChangesSince = opts.ChangesSince
@@ -106,6 +105,9 @@ func FilterServers(servers []Server, opts ListServerOpts) ([]Server, error) {
 
 	if opts.ID != "" {
 		m["ID"] = opts.ID
+	}
+	if opts.Name != "" {
+		m["Name"] = opts.Name
 	}
 	if opts.UserID != "" {
 		m["UserID"] = opts.UserID
