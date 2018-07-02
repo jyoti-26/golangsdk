@@ -58,3 +58,29 @@ func TestDeleteTag(t *testing.T) {
 	res := tags.Delete(fake.ServiceClient(), "2bff7a8a-3934-4f79-b1d6-53dc5540f00e")
 	th.AssertNoErr(t, res.Err)
 }
+
+func TestGetTags(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+
+	th.Mux.HandleFunc("/servers/2bff7a8a-3934-4f79-b1d6-53dc5540f00e/tags", func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, "GET")
+		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		fmt.Fprintf(w, `
+{
+    "tags": [
+        "__type_baremetal"
+    ]
+}
+		`)
+	})
+
+	n, err := tags.Get(fake.ServiceClient(), "2bff7a8a-3934-4f79-b1d6-53dc5540f00e").Extract()
+	th.AssertNoErr(t, err)
+	th.AssertEquals(t, "__type_baremetal", n.Tags[0])
+
+}

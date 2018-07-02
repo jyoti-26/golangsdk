@@ -35,6 +35,12 @@ func Create(c *golangsdk.ServiceClient, serverId string, opts CreateOptsBuilder)
 	return
 }
 
+// Get retrieves a particular tag based on its unique ID.
+func Get(c *golangsdk.ServiceClient, serverId string) (r GetResult) {
+	_, r.Err = c.Get(resourceURL(c, serverId), &r.Body, nil)
+	return
+}
+
 // Delete will permanently delete a particular tag based on its unique ID.
 func Delete(c *golangsdk.ServiceClient, serverId string) (r DeleteResult) {
 	_, r.Err = c.Delete(resourceURL(c, serverId), nil)
