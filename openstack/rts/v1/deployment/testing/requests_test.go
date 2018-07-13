@@ -2,7 +2,7 @@ package testing
 
 import (
 	"fmt"
-	"github.com/huaweicloud/golangsdk/openstack/rts/v1/softwareconfiguration/deployment"
+	"github.com/huaweicloud/golangsdk/openstack/rts/v1/deployment"
 	th "github.com/huaweicloud/golangsdk/testhelper"
 	fake "github.com/huaweicloud/golangsdk/testhelper/client"
 	"net/http"
